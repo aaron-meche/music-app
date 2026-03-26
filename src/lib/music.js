@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 export const musickitInstance = writable(null);
 export const isAuthorized = writable(false);
 
-export async function initializeMusicKit(developerToken) {
+export async function initializeMusicKit(developerToken, callback) {
     await MusicKit.configure({
         developerToken,
         app: {
@@ -16,5 +16,6 @@ export async function initializeMusicKit(developerToken) {
     musickitInstance.set(music);
     isAuthorized.set(music.isAuthorized);
 
+    if (callback) callback(music)
     return music;
 }

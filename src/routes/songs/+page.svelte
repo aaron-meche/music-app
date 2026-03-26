@@ -16,6 +16,7 @@
         const response = await instance.api.music(path, {
             limit: 25,
             offset: 0,
+            sort: '-dateAdded'
         });
 
         if (callback) callback(response?.data?.data || null);
@@ -24,7 +25,7 @@
     // Page Load
     onMount(async () => {
         music = await initializeMusicKit(devtoken, async (res) => {
-            fetchAppleMusic(res, "/v1/me/library/recently-added", val => {
+            fetchAppleMusic(res, "/v1/me/library/songs", val => {
                 console.log(val)
                 songs = val
             })
