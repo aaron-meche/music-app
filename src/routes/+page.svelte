@@ -1,19 +1,48 @@
-<!-- created by Aaron Meche -->
+<!-- src/routes/+page.svelte -->
 <script>
-    
-</script>
+    import { onMount } from "svelte";
+    import { devtoken } from "$lib/env"
+    import {
+        initializeMusicKit,
+        musickitInstance,
+        isAuthorized,
+    } from "$lib/music";
 
-<!--  -->
+    let songs = [];
+    let music;
 
-<div class="page">
-    Home Page
-</div>
+    onMount(async () => {
+        music = await initializeMusicKit(devtoken);
+    });
 
-<!--  -->
-
-<style>
-    .page{
-        padding: 2rem;
+    async function authorize() {
+        await music.authorize();
+        isAuthorized.set(music.isAuthorized);
     }
 
-</style>
+    async function fetchLibrarySongs() {
+        const response = await music.api.music("/v1/me/library/songs", {
+            limit: 25,
+            offset: 0,
+        });
+
+        songs = response.data.data;
+        console.log(songs)
+    }
+</script>
+
+{#if !$isAuthorized}
+    <button on:click={authorize}>Connect Apple Music</button>
+{:else}
+    <button on:click={fetchLibrarySongs}>Load My Songs</button>
+{/if}
+
+{#each songs as song}
+    <div>
+        <img
+            src={song.attributes.artwork?.url.replace("{w}x{h}", "60x60")}
+            alt="artwork"
+        />
+        <p>{song.attributes.name} — {song.attributes.artistName}</p>
+    </div>
+{/each}
