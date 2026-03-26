@@ -2,53 +2,36 @@
 	import '$lib/main.css';
 	import '$lib/main.rue';
     import TopNavbar from '$lib/components/TopNavbar.svelte';
+	import LeftNavbar from '$lib/components/LeftNavbar.svelte';
+	import { devtoken } from "$lib/env";
 	import { onMount } from 'svelte';
 	import { db } from "$lib/data"
+    import { initMusicInstance, music_instance, fetchAppleMusic } from "$lib/music";
 	let { children } = $props();
+
+    let songs = [];
+    let music;
 
 	// Regular Update Cycle
 	// ... cache management, 
 	// ... other updates ...
-	function regularUpdateCycle() {
+	async function regularUpdateCycle(instance) {
 		console.log("RegUpdate")
 		db.update(data => {
-			// let libraryAppIdArray = data?.cache?.libraryAppIdArray || []
-			// // Missing User Object
-			// if (Object.keys(data.user).length < 1) {
-			// 	console.log("Fetching playerSummary")
-			// 	serverAPI.get("playerSummary/" + steamID, (res => {
-			// 		db.update(data => {
-			// 			data.user = res.response.players[0]
-			// 			return data
-			// 		})
-			// 	}))
-			// }
-			// // No Saved LibraryAppIdArray
-			// if (!data?.cache?.libraryAppIdArray) {
-			// 	console.log("Fetching ownedGames")
-			// 	serverAPI.get("ownedGames/" + steamID, res => {
-			// 		data.cache.libraryAppIdArray = res?.response?.games.map(i => i.appid) || []
-			// 	})
-			// }
-			// // Check for missing Library object
-			// if (!data?.cache?.library) data.cache.library = {}
-			// // Check for missing Library Cache content
-			// if (Object.keys(data?.cache?.library) < libraryAppIdArray.length) {
-			// 	for (let i = 0; i < libraryAppIdArray.length; i++) {
-			// 		let appID = libraryAppIdArray[i]
-			// 		if (!data.cache.library?.[appID]) {
-			// 			serverAPI.get("gameDetails/" + appID, res => {
-			// 				data.cache.library[appID] = res?.[appID]?.data
-			// 			})
-			// 		}
-			// 	}
-			// }
-			// console.log("cache", data.cache)
+			if (data.cache.recentlyAdded.length < 1) {
+				fetchAppleMusic(instance, "/v1/me/library/recently-added", val => {
+					data.cache.recentlyAdded = val
+				})
+			}
 			return data
 		})
 	}
 
-	onMount(regularUpdateCycle)
+	onMount(() => {
+		initMusicInstance(instance => {
+			regularUpdateCycle(instance)
+		})
+	})
 </script>
 
 <svelte:head>
@@ -58,8 +41,8 @@
 </svelte:head>
 
 <div class="app">
-	<div class="top-navbar">
-		<TopNavbar />
+	<div class="left-navbar">
+		<LeftNavbar />
 	</div>
 	
 	<div class="main">
@@ -68,5 +51,8 @@
 </div>
 
 <style>
-
+	.app{
+		display: grid;
+		grid-template-columns: 1fr 3fr;
+	}
 </style>

@@ -19,7 +19,6 @@
 <style lang="rue">
     .wrapper{
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(calc(160px + 1.6rem), 1fr));
-        margin: 0 var(--inline-moat);
+        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
     }
 </style>

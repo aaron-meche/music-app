@@ -2,42 +2,16 @@
 <script>
     import { onMount } from "svelte";
     import { devtoken } from "$lib/env";
-    import {
-        initializeMusicKit,
-        musickitInstance,
-        isAuthorized,
-    } from "$lib/music";
+    import { db } from "$lib/data"
+    import { isAuthorized, music_instance, fetchAppleMusic } from "$lib/music";
     import SongGrid from "$lib/components/SongGrid.svelte";
 
-    let songs = [];
-    let music;
-
-    async function fetchAppleMusic(instance, path, callback) {
-        const response = await instance.api.music(path, {
-            limit: 25,
-            offset: 0,
-        });
-
-        if (callback) callback(response?.data?.data || null);
+    let recentlyAdded = []
+    $: {
+        recentlyAdded = $db.cache.recentlyAdded || []
     }
 
-    // Page Load
-    onMount(async () => {
-        music = await initializeMusicKit(devtoken, async (res) => {
-            fetchAppleMusic(res, "/v1/me/library/recently-added", val => {
-                console.log(val)
-                songs = val
-            })
-        });
-    });
-
-    // Connect Library
-    async function authorize() {
-        await music.authorize();
-        isAuthorized.set(music.isAuthorized);
-    }
-
-    const exampleObj = {
+    const exampleSongObj = {
         id: "i.YJMKodPfRWeWaDe",
         type: "library-songs",
         href: "/v1/me/library/songs/i.YJMKodPfRWeWaDe",
@@ -70,14 +44,25 @@
 
 <!--  -->
 
-{#if !$isAuthorized}
-    <button on:click={authorize}>Connect Apple Music</button>
-{:else}
-    <SongGrid {songs} />
+{#if $isAuthorized}
+    <div class="page-title">Recently Added</div>
+    <div class="content">
+        <SongGrid songs={recentlyAdded} />
+    </div>
 {/if}
 
 <!--  -->
 
 <style lang="rue">
+    .page-title{
+        margin-top: 4.8rem;
+        margin-bottom: 1.2rem;
+        margin-inline: 2.4rem;
+        font-size: 2.4rem;
+        font-weight: 700;
+    }
     
+    .content{
+        margin-inline: 1.6rem;
+    }
 </style>

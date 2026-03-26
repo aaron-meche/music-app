@@ -34,15 +34,11 @@
         },
     };
 
-    $effect(() => {
-        console.log(song)
-    })
-
 </script>
 
 <!--  -->
 
-<a href={resolve("/playing?id=" + song.id)} class="item">
+<a href={resolve("/play?href=" + song.href)} class="item">
     <img src={song.attributes.artwork.url.replace("{w}x{h}","160x160")} alt={song.attributes.albumName}>
     <div class="details">
         <div class="name">{song.attributes.name || "Unknown"}</div>
@@ -56,24 +52,29 @@
 <style lang="rue">
     .item{
         display: grid;
-        gap: 0.8rem;
-        padding: 0.8rem;
         border-radius: 1.6rem;
+        opacity: 0.9;
         cursor: pointer;
 
         img{
-            width: 100%;
+            width: calc(100% - 1.2rem);
+            margin: 0.6rem;
             aspect-ratio: 1 / 1;
-            border-radius: 0.8rem;
+            border-radius: 0.6rem;
+            transition: 250ms;
         }
 
         .details{
             display: grid;
             gap: 0.2rem;
-            margin-bottom: 0.4rem;
+            margin-inline: 0.8rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.8rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            opacity: 0.9;
+            transition: 250ms;
 
             .name{
                 font-weight: 500;
@@ -83,10 +84,17 @@
             }
         }
 
-
         :hover{
-            background: linear-gradient(to top right, var(--la0), var(--la1));
-            outline: solid 1pt var(--l3);
+            opacity: 1;
+
+            img{
+                width: 100%;
+                margin: 0rem;
+            }
+            
+            .details{
+                margin: 0.6rem 0.8rem;
+            }
         }
     }
 

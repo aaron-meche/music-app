@@ -1,9 +1,10 @@
 import { writable } from 'svelte/store';
+import { devtoken } from "$lib/env"
 
-export const musickitInstance = writable(null);
 export const isAuthorized = writable(false);
+export const music_instance = writable(null)
 
-export async function initializeMusicKit(developerToken, callback) {
+async function initializeMusicKit(developerToken, callback) {
     await MusicKit.configure({
         developerToken,
         app: {
@@ -13,9 +14,24 @@ export async function initializeMusicKit(developerToken, callback) {
     });
 
     const music = MusicKit.getInstance();
-    musickitInstance.set(music);
     isAuthorized.set(music.isAuthorized);
+    music_instance.set(music)
 
     if (callback) callback(music)
     return music;
+}
+
+export async function initMusicInstance(callback) {
+    await initializeMusicKit(devtoken, async (res) => {
+        callback(res)
+    });
+}
+
+export async function fetchAppleMusic(instance, path, callback) {
+    const response = await instance.api.music(path, {
+        limit: 25,
+        offset: 0,
+    });
+
+    if (callback) callback(response?.data?.data || null);
 }

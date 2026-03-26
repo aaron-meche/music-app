@@ -8,11 +8,18 @@
 
 import { writable } from 'svelte/store'
 
-const app_title = "myapp_0.0.0"
+const app_title = "music0.0.4"
 const storage_ref = `ldb-${app_title}`
 
 let initial_db = {
     user: {},
+    library: {
+        songs: [],
+    },
+    cache: {
+        recentlyAdded: [],
+    },
+    music: null,
 }
 
 const storage = {

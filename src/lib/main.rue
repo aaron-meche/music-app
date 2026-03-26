@@ -1,11 +1,11 @@
-def hue: 240;
+def hue: 290;
 def sat: 8%;
 def strt: 6%;
 def diff: -6%;
 
 func getLayer(layer = 0, extraSat = 0, extraLight = 0) {
-    let hue = 212;
-    let sat = 22
+    let hue = 290;
+    let sat = 8
     let satDiff = 6
     let light = 8;
     let lightDiff = 6
@@ -39,10 +39,10 @@ def lb4: getLayer(4, 0, 4);
 def lb5: getLayer(5, 0, 4);
 def lb6: getLayer(6, 0, 4);
 
-def soft-accent: hsl(212, 50%, 40%);
-def accent: hsl(212, 75%, 50%);
-def accent-low: hsl(212, 75%, 50%, 4%);
-def bright-accent: hsl(212, 75%, 65%);
+def soft-accent: hsl(290, 50%, 40%);
+def accent: hsl(290, 75%, 50%);
+def accent-low: hsl(290, 75%, 50%, 4%);
+def bright-accent: hsl(290, 75%, 65%);
 def warning: #ca0000;
 def contrast: white;
 
