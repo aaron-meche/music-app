@@ -38,7 +38,7 @@
 
 <!--  -->
 
-<a href={resolve("/play?href=" + song.href)} class="item">
+<a href={resolve("/album?href=" + song.href)} class="item">
     <img src={song.attributes.artwork.url.replace("{w}x{h}","160x160")} alt={song.attributes.albumName}>
     <div class="details">
         <div class="name">{song.attributes.name || "Unknown"}</div>

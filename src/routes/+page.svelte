@@ -3,12 +3,13 @@
     import { onMount } from "svelte";
     import { devtoken } from "$lib/env";
     import { db } from "$lib/data"
-    import { isAuthorized, music_instance, fetchAppleMusic } from "$lib/music";
+    import { isAuthorized } from "$lib/music";
     import SongGrid from "$lib/components/SongGrid.svelte";
 
     let recentlyAdded = []
     $: {
         recentlyAdded = $db.cache.recentlyAdded || []
+        console.log(recentlyAdded)
     }
 
     const exampleSongObj = {
