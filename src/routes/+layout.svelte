@@ -6,7 +6,7 @@
 	import { devtoken } from "$lib/env";
 	import { onMount } from 'svelte';
 	import { db } from "$lib/data"
-    import { initMusicInstance, music_instance, fetchAppleMusic } from "$lib/music";
+    import { initMusicInstance, getMusicData } from "$lib/music";
 	let { children } = $props();
 
     let songs = [];
@@ -15,21 +15,28 @@
 	// Regular Update Cycle
 	// ... cache management, 
 	// ... other updates ...
-	async function regularUpdateCycle(instance) {
-		console.log("RegUpdate")
-		db.update(data => {
-			if (data.cache.recentlyAdded.length < 1) {
-				fetchAppleMusic(instance, "/v1/me/library/recently-added", val => {
-					data.cache.recentlyAdded = val
-				})
-			}
-			return data
-		})
-	}
+	// async function regularUpdateCycle(instance) {
+	// 	console.log("RegUpdate")
+	// 	db.update(data => {
+	// 		if (data.cache.recentlyAdded.length < 1) {
+	// 			fetchAppleMusic(instance, "/v1/me/library/recently-added", val => {
+	// 				data.cache.recentlyAdded = val
+	// 			})
+	// 		}
+	// 		return data
+	// 	})
+	// }
 
 	onMount(() => {
-		initMusicInstance(instance => {
-			regularUpdateCycle(instance)
+		initMusicInstance(async (instance) => {
+			getMusicData(instance, "/v1/me/library/recently-added", {
+				page: 0,
+			}, ret => {
+				db.update(data => {
+					data.cache.recentlyAdded = ret.data.data
+					return data
+				})
+			})
 		})
 	})
 </script>

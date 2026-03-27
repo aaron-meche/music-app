@@ -35,3 +35,14 @@ export async function fetchAppleMusic(instance, path, callback) {
 
     if (callback) callback(response?.data?.data || null);
 }
+
+export async function getMusicData(instance, path, input, callback) {
+    const pageSize = 16
+    const response = await instance.api.music(path, {
+        limit: 16,
+        offset: input?.page * pageSize || 0,
+        include: 'tracks',
+    });
+    if (callback) callback(response)
+    return response
+}

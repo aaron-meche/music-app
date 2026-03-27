@@ -1,6 +1,8 @@
 <!-- created by Aaron Meche -->
 <script>
+    import { goto } from "$app/navigation";
     import { resolve } from "$app/paths";
+    import { db } from "$lib/data"
 
     let { song } = $props()
 
@@ -34,18 +36,26 @@
         },
     };
 
+    function openAlbumPage(song) {
+        db.update(data => {
+            data.active = song
+            return data
+        })
+        goto("/album")
+    }
+
 </script>
 
 <!--  -->
 
-<a href={resolve("/album?href=" + song.href)} class="item">
+<button onclick={() => openAlbumPage(song)} class="item">
     <img src={song.attributes.artwork.url.replace("{w}x{h}","160x160")} alt={song.attributes.albumName}>
     <div class="details">
         <div class="name">{song.attributes.name || "Unknown"}</div>
         <div class="artist">{song.attributes.artistName || "Unknown"}</div>
         <!-- <div class="album">{song.attributes.albumName}</div> -->
     </div>
-</a>
+</button>
 
 <!--  -->
 

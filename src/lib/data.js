@@ -8,7 +8,7 @@
 
 import { writable } from 'svelte/store'
 
-const app_title = "music0.0.4"
+const app_title = "music0.0.5"
 const storage_ref = `ldb-${app_title}`
 
 let initial_db = {
@@ -19,6 +19,7 @@ let initial_db = {
     cache: {
         recentlyAdded: [],
     },
+    active: {},
     music: null,
 }
 

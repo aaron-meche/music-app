@@ -25,6 +25,7 @@
 <style lang="rue">
     .logo{
         padding: 1.6rem 2.4rem;
+        padding-right: 0;
         font-size: 2rem;
         font-weight: 700;
         cursor: pointer;
@@ -34,7 +35,7 @@
     }
 
     .nav-stack{
-        padding: 0 0.8rem;
+        padding-left: 0.8rem;
     }
 
 </style>
